@@ -34,11 +34,13 @@ public class GUI extends JFrame implements Runnable {
 	private Strategy strategy;
 	private JTable table;
 	private JLabel topic;
+	private boolean checkEnd;
 	
 	public GUI(Game g, Strategy strategy ){
 		super("TicTacToe");
 		this.game = g;
 		this.strategy = strategy;
+		checkEnd = false;
 		setSize(400,400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -46,7 +48,7 @@ public class GUI extends JFrame implements Runnable {
 	}
 	private void initComponents() {
 		gamePanel.setLayout(new FlowLayout() );
-		topic = new JLabel( "Tic Tac Toe" );
+		topic = new JLabel( "GAME START!!!" );
 		topic.setSize( 40, 400 );
 		gamePanel.add( topic );
 		table = new JTable( SIZE, SIZE ){
@@ -77,20 +79,32 @@ public class GUI extends JFrame implements Runnable {
 			public void mouseClicked( MouseEvent e ) {
 				int row = table.getSelectedRow();
 				int column = table.getSelectedColumn();
-				
-				if( table.getValueAt( row, column) == null ) {
-					table.setValueAt( game.getCurrentPlayer().getSymbol().getValue(), row, column );
-					game.getBoard().placeSymbol(game.getCurrentPlayer().getSymbol(), row+1, column+1);
-					if( game.isOver( game.getCurrentPlayer() ) ) {
-						topic.setText( "GAME OVER\n" + game.getCurrentPlayer().getName() + " wins!!!" );
-					}
-					game.changeCurrentPlayer();
-				}
+				action( table, row, column );
 			}
 		});
 		gamePanel.add( table );
 		add(gamePanel);
 		setVisible( true );
+	}
+	
+	public void action( JTable table, int row, int column ) {
+		
+		if( !checkEnd ) {
+			
+			if( table.getValueAt( row, column ) == null ) {
+				table.setValueAt( game.getCurrentPlayer().getSymbol().getValue(), row, column );
+				game.getBoard().placeSymbol(game.getCurrentPlayer().getSymbol(), row+1, column+1);
+				if( game.isOver( game.getCurrentPlayer() ) == true ) {
+					checkEnd = game.isOver(game.getCurrentPlayer());
+					System.out.println( checkEnd );
+					topic.setText( "Game OVER!!!\n" + game.getCurrentPlayer().getName() + " wins." );
+				}
+				else {
+					game.changeCurrentPlayer();
+				}
+			}
+		}
+		
 	}
 		
 	@Override

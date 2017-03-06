@@ -13,13 +13,11 @@ public class Game {
 	private Player[] players;
 	private Board board;
 	private Strategy strategy;
-	private boolean over;
 	private Player currentPlayer;
 
 	public Game(Strategy strategy) {
 		this.players = new Player[]{ new Player( "P1", "X" ), new Player( "P2", "O" ) };
 		this.board = board.getInstance();
-		this.over = false;
 		this.strategy = strategy;
 		currentPlayer = players[0];
 	}
@@ -34,7 +32,7 @@ public class Game {
 	}
 
 	public boolean isOver(Player p){
-		return over = strategy.isEnd(board, p);
+		return strategy.isEnd(board, p);
 	}
 	
 	public void changeCurrentPlayer() {
