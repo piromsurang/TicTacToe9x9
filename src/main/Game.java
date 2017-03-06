@@ -47,4 +47,9 @@ public class Game {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
+	
+	public void reset() {
+		board.clearMap();
+		currentPlayer = players[0];
+	}
 }

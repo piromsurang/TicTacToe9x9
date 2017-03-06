@@ -26,8 +26,10 @@ import javax.swing.table.TableColumnModel;
 import algorithm.Strategy;
 import algorithm.StrategyA;
 import main.Game;
+import model.Board;
 
 public class GUI extends JFrame implements Runnable {
+		
 	private JPanel gamePanel = new JPanel();
 	private Game game;
 	private final int SIZE = 9;
@@ -35,62 +37,64 @@ public class GUI extends JFrame implements Runnable {
 	private JTable table;
 	private JLabel topic;
 	private boolean checkEnd;
+	private JButton resetButton;
+	private JButton exitButton;
 	
 	public GUI(Game g, Strategy strategy ){
 		super("TicTacToe");
 		this.game = g;
 		this.strategy = strategy;
 		checkEnd = false;
-		setSize(400,400);
+		setSize(400,450);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		
 	}
 	private void initComponents() {
 		gamePanel.setLayout(new FlowLayout() );
+		resetButton = new JButton( "Reset" );
+		resetButton.addActionListener( new ActionListener() {
+			
+			public void actionPerformed( ActionEvent e ) {
+				game.reset();
+				resetTable();
+				checkEnd = false;
+				topic.setText( "GAME START!!!" );
+			}
+			
+		});
+		exitButton = new JButton( "Exit" );
+		exitButton.addActionListener( new ActionListener() {
+			
+			public void actionPerformed( ActionEvent e ) {
+				exit();
+			}
+			
+		});
+		
 		topic = new JLabel( "GAME START!!!" );
 		topic.setSize( 40, 400 );
-		gamePanel.add( topic );
-		table = new JTable( SIZE, SIZE ){
 
+		table = new JTable( SIZE, SIZE ){
+			
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 			
 		};
-		table.setRowHeight(40);
-		TableColumnModel model = table.getColumnModel();
-		for( int i = 0 ; i < SIZE ; i++ ) {
-			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-			centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-			model.getColumn(i).setCellRenderer( centerRenderer );
-			model.getColumn(i).setPreferredWidth( 400/9 );
-		}
-		for( int i = 0 ; i < SIZE ; i++ ) {
-			for( int j = 0 ; j < SIZE ; j++ ) {
-				
-			}
-		}
-		table.setCellSelectionEnabled(true);
-		table.setShowGrid( true );
-		table.setGridColor( Color.BLACK );
-		table.addMouseListener( new MouseAdapter() {
-			public void mouseClicked( MouseEvent e ) {
-				int row = table.getSelectedRow();
-				int column = table.getSelectedColumn();
-				action( table, row, column );
-			}
-		});
+		
+		gamePanel.add( topic );
 		gamePanel.add( table );
+		gamePanel.add( resetButton );
+		gamePanel.add( exitButton );
 		add(gamePanel);
 		setVisible( true );
 	}
 	
 	public void action( JTable table, int row, int column ) {
 		
-		if( !checkEnd ) {
-			
+		if( !checkEnd ) {	
 			if( table.getValueAt( row, column ) == null ) {
 				table.setValueAt( game.getCurrentPlayer().getSymbol().getValue(), row, column );
 				game.getBoard().placeSymbol(game.getCurrentPlayer().getSymbol(), row+1, column+1);
@@ -109,8 +113,42 @@ public class GUI extends JFrame implements Runnable {
 		
 	@Override
 	public void run() {
-		initComponents();
-		
+		initComponents();	
+	}
+	
+	public void exit(){
+		this.dispose();
+	}
+	
+	public void resetTable() {
+		for( int i = 0 ; i < SIZE ; i++ ) {
+			for( int j = 0 ; j < SIZE ; j++ ) {
+				table.setValueAt( null, i, j);
+			}
+		}
+	}
+	
+	public void initializeTable() {		
+		table.setRowHeight(40);
+		TableColumnModel model = table.getColumnModel();
+		for( int i = 0 ; i < SIZE ; i++ ) {
+			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+			model.getColumn(i).setCellRenderer( centerRenderer );
+			model.getColumn(i).setPreferredWidth( 400/9 );
+		}
+		table.setCellSelectionEnabled(true);
+		table.setShowGrid( true );
+		table.setGridColor( Color.BLACK );
+		table.addMouseListener( new MouseAdapter() {
+			
+			public void mouseClicked( MouseEvent e ) {
+				int row = table.getSelectedRow();
+				int column = table.getSelectedColumn();
+				action( table, row, column );
+			}
+			
+		});
 	}
 
 }

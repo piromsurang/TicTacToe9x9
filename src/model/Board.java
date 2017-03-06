@@ -57,4 +57,12 @@ public class Board {
 	public void setMap(Symbol[][] map) {
 		this.map = map;
 	}
+	
+	public void clearMap() {
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
+				getMap()[i][j] = new Symbol(STRING_EMPTY);
+			}
+		}
+	}
 }
