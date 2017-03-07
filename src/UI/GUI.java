@@ -83,6 +83,7 @@ public class GUI extends JFrame implements Runnable {
 			}
 			
 		};
+		initializeTable();
 		
 		gamePanel.add( topic );
 		gamePanel.add( table );
