@@ -95,8 +95,8 @@ public class StrategyA implements Strategy{
 				}
 			}
 		}
-		for(int i = (Board.BOARD_SIZE - 1) ; i >= (Board.BOARD_SIZE - 8) ; i--){
-			for(int j = i, k = Board.BOARD_SIZE -1; j < Board.BOARD_SIZE && k >= 0 ;j++,k--){
+		for(int i = (Board.BOARD_SIZE - 1) ; i >= (Board.BOARD_SIZE - 4) ; i--){
+			for(int j = i - 4, k = Board.BOARD_SIZE -1; j < Board.BOARD_SIZE && k >= 0 ;j++,k--){
 				if(board.getMap()[j][k].getValue().equals(p.getSymbol().getValue())){
 					c++;
 					if(c >= 5) return true;
